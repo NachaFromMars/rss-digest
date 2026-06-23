@@ -1,35 +1,34 @@
----
-name: rss-digest
-description: "Agentic RSS digest using the feed CLI. Fetch, triage, and summarize RSS feeds to surface high-signal posts. Use when: (1) reading RSS feeds or catching up on news, (2) user asks for a digest, roundup, or summary of recent posts, (3) user asks what's new or interesting today, (4) user mentions feed, RSS, or blogs."
-metadata: {"openclaw": {"emoji": "📡", "requires": {"bins": ["feed"]}, "install": [{"kind": "brew", "formula": "odysseus0/tap/feed", "bins": ["feed"], "label": "Install via Homebrew"}, {"kind": "go", "package": "github.com/odysseus0/feed/cmd/feed@latest", "bins": ["feed"], "label": "Install via Go"}]}}
----
+# rss-digest — Agentic RSS digest that surfaces what's worth reading
 
-# RSS Digest
+> Scan, triage, read, and synthesize your RSS feeds into a focused digest. Powered by the `feed` CLI — surfaces high-signal posts and skips the noise.
 
-Surface what's worth reading from RSS feeds. Requires `feed` CLI (`brew install odysseus0/tap/feed`).
+[![OpenClaw Skill](https://img.shields.io/badge/OpenClaw-Skill-blueviolet)](https://github.com/NachaFromMars)
 
-## Workflow
+## Overview
+rss-digest uses the `feed` CLI to fetch unread RSS entries, triage them for relevance, read full content for selected posts, and compile a themed digest. If no feeds are configured, it can import an OPML starter set automatically. Results are grouped by theme when natural clusters emerge. A good fit for daily news catch-up, blog roundups, and interest-specific reading briefs.
 
-1. **Scan** — `feed get entries --limit 50` for recent unread (title, feed, date, URL, summary). Auto-fetches if stale. If 0 results, run `feed get stats` — if 0 feeds, import starter set: `feed import https://github.com/odysseus0/feed/raw/main/hn-popular-blogs-2025.opml` and retry.
-3. **Triage** — Pick 5-10 high-signal posts based on the user's prompt. If no specific interest given, prioritize surprising, contrarian, or unusually insightful pieces.
-4. **Read + Synthesize** — For each picked entry, read the full content and summarize in 2-3 sentences. Prefer fetching the URL directly (e.g. WebFetch) if available — keeps full text out of context. Otherwise use `feed get entry <id>` to read the stored content. Parallelize when possible.
-5. **Present** — Compile the summaries into a digest. Group by theme if natural clusters emerge.
-## Commands
+## Features
+- **Scan** — `feed get entries --limit 50` fetches recent unread with title/feed/date/URL/summary
+- **Triage** — picks 5–10 high-signal posts based on your prompt or interest
+- **Read + synthesize** — fetches full URL or `feed get entry <id>`, 2–3 sentence summary each
+- **Present** — compiled digest, grouped by theme when natural clusters emerge
+- **Auto-bootstrap** — if 0 feeds: imports OPML starter set and retries
 
+## Usage / Quick Start
+```bash
+# Install
+brew install odysseus0/tap/feed
+# or
+go install github.com/odysseus0/feed/cmd/feed@latest
 ```
-feed get entries --limit N              # list unread entries (table)
-feed get entries --feed <id> --limit N  # filter by feed
-feed get entry <id>                     # read full post (markdown)
-feed fetch                              # pull latest from all feeds
-feed search "<query>"                   # full-text search
-feed update entries --read <id> ...     # batch mark read
-feed get feeds                          # list feeds with unread counts
-feed get stats                          # database stats
-```
+Then trigger with: *"Give me today's digest"* or *"What's new in AI this week?"*
 
-## Notes
+## Trigger Keywords (OpenClaw)
+RSS digest, news roundup, catch up on news, what's new today, feed digest, blog roundup
 
-- The entries table includes full URLs. Prefer fetching URLs directly (keeps full text out of your context window). Fall back to `feed get entry <id>` if you don't have a web fetch tool.
-- Do NOT mark entries as read. The user decides what to mark read.
-- Default output is table — most token-efficient for scanning. Avoid `-o json`.
-- Filter by feed if too many entries: `--feed <feed_id>`.
+## Related Skills
+- [news-summary](https://github.com/NachaFromMars/news-summary) — curated international RSS sources
+- [ai-news-collectors](https://github.com/NachaFromMars/ai-news-collectors) — AI-specific news aggregation
+
+---
+Part of the [NachaFromMars](https://github.com/NachaFromMars) OpenClaw skill ecosystem.
